@@ -3085,6 +3085,21 @@ process_suspend (DebuggerTlsData *tls, MonoContext *ctx)
 	suspend_current ();
 }
 
+
+/* Conditionally call process_suspend depending oh the current state */
+static gboolean
+try_process_suspend (DebuggerTlsData *tls, MonoContext *ctx)
+{
+	if (suspend_count > 0) {
+		/* Fastpath during invokes, see in process_suspend () */
+		if (suspend_count - tls->resume_count == 0)
+			return FALSE;
+		process_suspend (tls, ctx);
+		return TRUE;
+	}
+	return FALSE;
+}
+
 /*
  * suspend_vm:
  *
@@ -5549,7 +5564,8 @@ process_breakpoint (DebuggerTlsData *tls, gboolean from_signal)
 	SeqPoint sp;
 	gboolean found_sp;
 
-	// FIXME: Speed this up
+	if (try_process_suspend (tls, ctx))
+		return;
 
 	ip = (guint8 *)MONO_CONTEXT_GET_IP (ctx);
 	ji = mini_jit_info_table_find (mono_domain_get (), (char*)ip, NULL);
@@ -5934,13 +5950,8 @@ process_single_step_inner (DebuggerTlsData *tls, gboolean from_signal)
 	if (from_signal)
 		mono_arch_skip_single_step (ctx);
 
-	if (suspend_count > 0) {
-		/* Fastpath during invokes, see in process_suspend () */
-		if (suspend_count - tls->resume_count == 0)
-			return;
-		process_suspend (tls, ctx);
+	if (try_process_suspend (tls, ctx))
 		return;
-	}
 
 	if (!ss_req)
 		// FIXME: A suspend race
