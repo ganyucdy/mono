@@ -6,13 +6,13 @@ agent:
   flavor: b1.large
 
 dependencies:
-  - .yamato/build_android.yml
-  - .yamato/build_linux_x64.yml
-  - .yamato/build_linux_x86.yml
-  - .yamato/build_osx_classlibs.yml
-  - .yamato/build_osx_runtime.yml
-  - .yamato/build_win.yml
-  - .yamato/build_win_x86.yml
+  - .yamato/Build Android.yml
+  - .yamato/Build Linux x64.yml
+  - .yamato/Build Linux x86.yml
+  - .yamato/Build Classlibs OSX.yml
+  - .yamato/Build Runtime OSX.yml
+  - .yamato/Build Windows x64.yml
+  - .yamato/Build Windows x86.yml
   
 commands:
   - .yamato/scripts/collate_builds.sh
@@ -23,7 +23,7 @@ triggers:
       - "/.*/"
   recurring:
     - branch: unity-master
-      frequency: weekly
+      frequency: daily # Should run between midnight and 6AM UTC
 
 artifacts: 
   builds:

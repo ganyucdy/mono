@@ -6,7 +6,7 @@ agent:
   flavor: b1.large
 
 dependencies:
-  - .yamato/collate_builds.yml
+  - .yamato/Collate Builds.yml
   
 commands:
   - pwd
@@ -14,8 +14,8 @@ commands:
   - curl -sSo StevedoreUpload.exe https://stevedore.unity3d.com/static/StevedoreUpload.exe
   - mono StevedoreUpload.exe --repo=testing --version-len=12 --version="$GIT_REVISION" stevedore/*
 
-#triggers:
-  #branches:
-    #only:
-      #- unity-master
+triggers:
+  branches:
+    only:
+      - stevedore-upload # Change to unity-master
 
