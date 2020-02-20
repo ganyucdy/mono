@@ -1,0 +1,21 @@
+name: 'Publish to Stevedore'
+
+agent:
+  type: Unity::VM
+  image: cds-ops/cds-ubuntu-18.04-base:stable
+  flavor: b1.large
+
+dependencies:
+  - .yamato/collate_builds.yml
+  
+commands:
+  - pwd
+  - ls
+  - curl -sSo StevedoreUpload.exe https://stevedore.unity3d.com/static/StevedoreUpload.exe
+  - mono StevedoreUpload.exe --repo=testing --version-len=12 --version="$GIT_REVISION" stevedore/*
+
+#triggers:
+  #branches:
+    #only:
+      #- unity-master
+

@@ -1,4 +1,4 @@
-name: collate_builds
+name: Collate Builds
 
 agent:
   type: Unity::VM
@@ -15,7 +15,7 @@ dependencies:
   - .yamato/build_win_x86.yml
   
 commands:
-  - .yamato/collate_builds.sh
+  - .yamato/scripts/collate_builds.sh
 
 triggers:
   branches:
@@ -32,4 +32,4 @@ artifacts:
   stevedore:
     paths:
       - stevedore/MonoBleedingEdge.7z
-      - stevedore/artifactid.txt
+      #- stevedore/artifactid.txt
