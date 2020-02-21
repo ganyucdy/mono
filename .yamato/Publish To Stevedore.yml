@@ -14,8 +14,3 @@ commands:
   - curl -sSo StevedoreUpload.exe "$STEVEDORE_UPLOAD_TOOL_URL"
   - mono StevedoreUpload.exe --repo=testing --version-len=12 --version="$GIT_REVISION" stevedore/*
 
-triggers:
-  branches:
-    only:
-      - stevedore-upload # Change to unity-master
-
